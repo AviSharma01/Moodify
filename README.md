@@ -1,1 +1,1 @@
-# WeeklyMix
+# Moodify
