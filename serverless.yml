@@ -2,7 +2,7 @@ service: Moodfiy
 
 provider:
   name: aws
-  runtime: python3.8
+  runtime: python3.10
   region: us-west-2
   environment:
     AWS_ACCESS_KEY_ID: your_access_key_id
