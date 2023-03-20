@@ -2,6 +2,7 @@ import configparser
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
+
 class SpotifyAPI:
     def __init__(self, config_file):
         config = configparser.ConfigParser()
@@ -17,8 +18,12 @@ class SpotifyAPI:
         self.playlist_name = config.get('playlist', 'name')
         self.min_plays = config.getint('playlist', 'min_plays')
 
-    def check_playlist_exists(self):
-        playlists = self.sp.current_user_playlists()
+    def get_user_id(self):
+        user = self.sp.current_user()
+        return user['id']
+
+    def check_playlist_exists(self, user_id):
+        playlists = self.sp.user_playlists(user_id)
         playlist_id = None
         for playlist in playlists['items']:
             if playlist['name'] == self.playlist_name:
@@ -26,8 +31,8 @@ class SpotifyAPI:
                 break
         return playlist_id
 
-    def create_playlist(self, description='', public=False):
-        new_playlist = self.sp.user_playlist_create(user='', name=self.playlist_name, public=public, description=description)
+    def create_playlist(self, user_id, description='', public=False):
+        new_playlist = self.sp.user_playlist_create(user=user_id, name=self.playlist_name, public=public, description=description)
         return new_playlist['id']
 
     def get_playlist_tracks(self, playlist_id):
@@ -42,9 +47,9 @@ class SpotifyAPI:
                 break
         return playlist_tracks
 
-    def get_user_top_tracks(self, time_range='short_term', limit=20):
+    def get_user_top_tracks(self, user_id, time_range='short_term', limit=20):
         user_tracks = []
-        results = self.sp.current_user_top_tracks(time_range=time_range, limit=limit)
+        results = self.sp.current_user_top_tracks(user_id, time_range=time_range, limit=limit)
         user_tracks += results['items']
         while results['next']:
             results = self.sp.next(results)
@@ -54,6 +59,7 @@ class SpotifyAPI:
     def add_tracks_to_playlist(self, playlist_id, track_uris):
         self.sp.playlist_add_items(playlist_id, track_uris)
         return len(track_uris)
+
 
     ''' def search_track(self, track_name, artist_name):
         query = f'track:{track_name} artist:{artist_name}'

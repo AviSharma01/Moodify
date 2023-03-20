@@ -16,9 +16,12 @@ CLIENT_ID = config['spotify']['client_id']
 CLIENT_SECRET = config['spotify']['client_secret']
 
 # AWS credentials
-AWS_ACCESS_KEY_ID = config['aws']['access_key_id']
-AWS_SECRET_ACCESS_KEY = config['aws']['secret_access_key']
-AWS_REGION = config['aws']['region']
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_REGION = os.environ['AWS_REGION']
+SENDER_EMAIL = os.environ['SENDER_EMAIL']
+RECIPIENT_EMAIL = os.environ['RECIPIENT_EMAIL']
+APPLE_ID = os.environ['APPLE_ID']
 
 # Authorization
 spotify = SpotifyAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
@@ -63,7 +66,7 @@ if filtered_tracks:
     days_until_friday = (4 - datetime.datetime.today().weekday()) % 7
     next_friday = datetime.datetime.today() + datetime.timedelta(days=days_until_friday)
     reminder_date = next_friday.strftime("%Y-%m-%d %H:%M:%S")
-    set_reminder(apple_id, "Weekly Playlist", reminder_date)
+    set_reminder(APPLE_ID, "Weekly Playlist", reminder_date)
 
 else:
     print("No tracks added to the playlist")
