@@ -1,0 +1,13 @@
+service: Moodfiy
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: us-west-2
+  environment:
+    AWS_ACCESS_KEY_ID: your_access_key_id
+    AWS_SECRET_ACCESS_KEY: your_secret_access_key
+    AWS_REGION: us-west-2
+    SENDER_EMAIL: sender@example.com
+    RECIPIENT_EMAIL: recipient@example.com
+    APPLE_ID: your_apple_id
