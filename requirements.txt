@@ -1,0 +1,4 @@
+boto3==1.26.65
+spotipy==2.22.1
+
+# Flask and Docker can be incorporated into the project based on the developments.
