@@ -1,7 +1,6 @@
 # Moodify
 
-### Discover your hidden music gems with Moodify - a personalized playlist generator based on your weekly Spotify listening history. Automate your music discovery and get weekly reminders via email.
----
+## Discover your hidden music gems with Moodify - a personalized playlist generator based on your weekly Spotify listening history. Automate your music discovery and get weekly reminders via email.
 
 ### Detailed Description:
 
