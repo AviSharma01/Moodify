@@ -8,6 +8,7 @@ Moodify is a Python script that analyzes a user's Spotify listening history and 
 
 ### For further development:
 Initially, the focus of Moodify would be to be able to run successfully on different operating systems. Moreover, Moodify can be expanded to include additional features such as personalized recommendations based on the user's music preferences, generating different playlists based on the preference of genre, integration with other music streaming services, and a user interface to enhance the user experience. Additionally, Moodify can be extended to support other languages and integrate with other data sources to improve the accuracy of mood analysis.
+(To be implemented soon!)
 
 
 
