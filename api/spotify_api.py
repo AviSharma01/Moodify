@@ -2,27 +2,28 @@ import configparser
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-
 class SpotifyAPI:
     def __init__(self, config_file):
+        # Load and parse configuration file
         config = configparser.ConfigParser()
         config.read(config_file)
 
+        # Retrieve Spotify credentials from the configuration file
         self.client_id = config.get('spotify', 'client_id')
         self.client_secret = config.get('spotify', 'client_secret')
 
+        # Setup the client credentials manager and Spotify client
         self.client_credentials_manager = SpotifyClientCredentials(client_id=self.client_id,
                                                                    client_secret=self.client_secret)
         self.sp = spotipy.Spotify(client_credentials_manager=self.client_credentials_manager)
 
-        self.playlist_name = config.get('playlist', 'name')
-        self.min_plays = config.getint('playlist', 'min_plays')
-
     def get_user_id(self):
+        #Fetches the Spotify user ID for the current authenticated user
         user = self.sp.current_user()
         return user['id']
 
     def check_playlist_exists(self, user_id):
+        #Checks if a specific playlist exists for the given user ID and returns its ID if found.
         playlists = self.sp.user_playlists(user_id)
         playlist_id = None
         for playlist in playlists['items']:
@@ -31,11 +32,13 @@ class SpotifyAPI:
                 break
         return playlist_id
 
-    def create_playlist(self, user_id, description='', public=False):
-        new_playlist = self.sp.user_playlist_create(user=user_id, name=self.playlist_name, public=public, description=description)
+    def create_playlist(self, user_id, name, description='', public=False):
+        #Creates a new playlist for the user with the given name and description.
+        new_playlist = self.sp.user_playlist_create(user=user_id, name=name, public=public, description=description)
         return new_playlist['id']
 
     def get_playlist_tracks(self, playlist_id):
+        #Fetches all tracks in a given playlist by its ID.
         playlist_tracks = []
         offset = 0
         while True:
@@ -47,39 +50,14 @@ class SpotifyAPI:
                 break
         return playlist_tracks
 
-    def get_user_top_tracks(self, user_id, time_range='short_term', limit=20):
-        user_tracks = []
-        results = self.sp.current_user_top_tracks(user_id, time_range=time_range, limit=limit)
-        user_tracks += results['items']
-        while results['next']:
-            results = self.sp.next(results)
-            user_tracks += results['items']
-        return user_tracks
+    def get_user_top_tracks(self, limit=20, time_range='short_term'):
+        #Fetches the top tracks for the current user based on the specified time range and limit, returning track IDs.
+        results = self.sp.current_user_top_tracks(limit=limit, time_range=time_range)
+        track_ids = [track['id'] for track in results['items']]
+        return track_ids
 
-    def add_tracks_to_playlist(self, playlist_id, track_uris):
-        self.sp.playlist_add_items(playlist_id, track_uris)
-        return len(track_uris)
+    def get_audio_features(self, track_ids):
+        #Fetches audio features for a list of track IDs and returns a dictionary mapping track IDs to their features.
+        audio_features = self.sp.audio_features(track_ids)
+        return {track['id']: track for track in audio_features if track is not None}
 
-
-    ''' def search_track(self, track_name, artist_name):
-        query = f'track:{track_name} artist:{artist_name}'
-        results = self.sp.search(q=query, type='track')
-        if results['tracks']['total'] > 0:
-            return results['tracks']['items'][0]['uri']
-        else:
-            return None
-
-    def search_artist(self, artist_name):
-        results = self.sp.search(q=f'artist:{artist_name}', type='artist')
-        if results['artists']['total'] > 0:
-            return results['artists']['items'][0]['uri']
-        else:
-            return None
-
-    def get_artist_top_tracks(self, artist_uri):
-        results = self.sp.artist_top_tracks(artist_uri)
-        return results['tracks']
-
-    def get_related_artists(self, artist_uri):
-        results = self.sp.artist_related_artists(artist_uri)
-        return results['artists'] '''
