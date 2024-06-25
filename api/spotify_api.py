@@ -1,18 +1,28 @@
 import configparser
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyOAuth
 
 class SpotifyAPI:
     def __init__(self, config_file):
         config = configparser.ConfigParser()
         if not config.read(config_file):
             raise FileNotFoundError("Configuration file not found.")
+
         self.client_id = config.get('spotify', 'client_id')
         self.client_secret = config.get('spotify', 'client_secret')
-        self.playlist_name = config.get('playlist', 'name')  # Assuming playlist name is stored in the config
+        self.redirect_uri = config.get('spotify', 'redirect_uri')
+        self.playlist_name = config.get('playlist', 'name')
 
-        self.client_credentials_manager = SpotifyClientCredentials(client_id=self.client_id, client_secret=self.client_secret)
-        self.sp = spotipy.Spotify(client_credentials_manager=self.client_credentials_manager)
+        # Set the scope to request the correct permissions
+        self.scope = "user-top-read playlist-modify-private user-read-private"
+        
+        # Initialize Spotify client with OAuth for user authentication
+        self.sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
+            client_id=self.client_id,
+            client_secret=self.client_secret,
+            redirect_uri=self.redirect_uri,
+            scope=self.scope
+        ))
 
     def get_user_id(self):
         return self.sp.current_user()['id']
