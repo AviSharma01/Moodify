@@ -3,6 +3,9 @@ import configparser
 import os
 import datetime
 import logging
+from Flask import Flask, request, redirect
+
+app = Flask(__name__)
 
 # Setup basic configuration for logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
