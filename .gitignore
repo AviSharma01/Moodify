@@ -1,16 +1,16 @@
 # Ignore virtual environment
 venv/
+.cache
+env/
+.cache-spotify
 
-# Ignore configuration files that contain sensitive information
 config/config.ini
 
-# Ignore Python byte-compiled files
 __pycache__/
-*.pyc
+*.py[cod]
 
-# Ignore IDE specific files
+
 .vscode/
 
-# Ignore OS generated files
 .DS_Store
 Thumbs.db
