@@ -1,16 +1,45 @@
 # Ignore virtual environment
 venv/
+.env/
+.venv/
+
+# Cache files
 .cache
-env/
 .cache-spotify
+__pycache__/
+*.py[cod]
+*$py.class
+
+env/
+.env
 
 config/config.ini
 
 __pycache__/
 *.py[cod]
 
-
 .vscode/
+.idea/
+*.swp
+*.swo
 
 .DS_Store
 Thumbs.db
+
+*.log
+logs/
+
+data/*.json
+data/playlist_history.json
+
+dist/
+build/
+*.egg-info/
+
+.coverage
+htmlcov/
+.pytest_cache/
+
+.ipynb_checkpoints
+
+.spotify_token_cache
